@@ -1,1 +1,1141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>誕生月×血液型カウンター</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Noto Sans JP",
+    "Hiragino Kaku Gothic ProN",
+    Meiryo,
+    sans-serif;
+
+  background:
+    linear-gradient(
+      180deg,
+      #dff8ff 0%,
+      #fff7fc 55%,
+      #f4ffff 100%
+    );
+
+  color: #17406b;
+}
+
+.app {
+  width: min(100%, 980px);
+  margin: auto;
+  padding: 10px;
+}
+
+
+/* =========================
+   タイトル
+========================= */
+
+header {
+  text-align: center;
+}
+
+.title {
+  display: inline-block;
+
+  margin: 0;
+  padding: 8px 20px 5px;
+
+  background: white;
+
+  border-radius: 24px;
+  border: 5px solid white;
+
+  box-shadow:
+    0 3px 0 #8c62dc;
+
+  color: #ed3b9a;
+
+  font-size: clamp(30px, 6vw, 58px);
+
+  font-weight: 1000;
+
+  letter-spacing: .03em;
+}
+
+.title span {
+  color: #0876d1;
+}
+
+.subtitle {
+  display: block;
+
+  width: max-content;
+  max-width: 100%;
+
+  margin: 8px auto;
+
+  padding: 8px 22px;
+
+  background: #f23b87;
+
+  color: white;
+
+  border-radius:
+    0 0 20px 20px;
+
+  font-size:
+    clamp(15px, 3vw, 26px);
+
+  font-weight: 1000;
+}
+
+.help {
+  margin: 8px;
+
+  font-size:
+    clamp(13px, 2.4vw, 20px);
+
+  font-weight: 900;
+}
+
+
+/* =========================
+   上部カウンター
+========================= */
+
+.stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 8px;
+
+  margin: 14px 0;
+}
+
+.stat {
+  background: white;
+
+  border: 3px solid #bca1ee;
+
+  border-radius: 18px;
+
+  padding: 8px;
+
+  text-align: center;
+
+  box-shadow:
+    0 3px 8px #00000012;
+}
+
+.stat:nth-child(2) {
+  border-color: #f2a1c8;
+}
+
+.stat:nth-child(3) {
+  border-color: #72c8ee;
+}
+
+.stat-label {
+  font-weight: 900;
+
+  font-size:
+    clamp(13px, 2.2vw, 19px);
+}
+
+.stat-value {
+  font-size:
+    clamp(27px, 5vw, 43px);
+
+  font-weight: 1000;
+
+  line-height: 1.1;
+}
+
+.stat:nth-child(1)
+.stat-value {
+  color: #6034c9;
+}
+
+.stat:nth-child(2)
+.stat-value {
+  color: #e82b79;
+}
+
+.stat:nth-child(3)
+.stat-value {
+  color: #0876d1;
+}
+
+
+/* =========================
+   月のマス
+========================= */
+
+.months {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 9px;
+}
+
+.month {
+  padding: 7px;
+
+  border: 2px solid #e6acd1;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff0fa,
+      #eefaff
+    );
+
+  box-shadow:
+    0 3px 8px #00000010;
+}
+
+.month:nth-child(4n + 2) {
+  background: #eefaff;
+  border-color: #88cfe9;
+}
+
+.month:nth-child(4n + 3) {
+  background: #f0fff7;
+  border-color: #94dfbe;
+}
+
+.month:nth-child(4n) {
+  background: #f7efff;
+  border-color: #c1a3ea;
+}
+
+.month-title {
+  margin: 0 4px 7px;
+
+  font-size:
+    clamp(20px, 3.8vw, 30px);
+
+  font-weight: 1000;
+}
+
+
+/* =========================
+   4つの血液型
+========================= */
+
+.cells {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 5px;
+}
+
+.cell {
+  min-height: 78px;
+
+  padding: 6px 2px;
+
+  background: white;
+
+  border:
+    2px solid #f09ac5;
+
+  border-radius: 12px;
+
+  text-align: center;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  transition:
+    transform .08s,
+    box-shadow .08s;
+}
+
+.cell.b {
+  border-color: #62c2eb;
+}
+
+.cell.o {
+  border-color: #6fd8a7;
+}
+
+.cell.ab {
+  border-color: #efca50;
+}
+
+.cell:active {
+  transform: scale(.95);
+}
+
+.cell-name {
+  font-size:
+    clamp(14px, 2.6vw, 21px);
+
+  font-weight: 1000;
+}
+
+.count {
+  font-size:
+    clamp(18px, 3.5vw, 27px);
+
+  font-weight: 1000;
+}
+
+.tap {
+  font-size:
+    clamp(9px, 1.8vw, 13px);
+
+  font-weight: 900;
+}
+
+
+/* =========================
+   5人達成
+========================= */
+
+.cell.done {
+  box-shadow:
+    0 0 0 4px #ffd04b,
+    0 4px 10px #0002;
+}
+
+.cell.done .count {
+  color: #f39a00;
+}
+
+
+/* =========================
+   ボタン
+========================= */
+
+.buttons {
+  text-align: center;
+
+  margin:
+    15px 0;
+}
+
+button {
+  border: 0;
+
+  border-radius: 30px;
+
+  padding:
+    11px 28px;
+
+  margin: 4px;
+
+  color: white;
+
+  font-size:
+    clamp(16px, 3vw, 24px);
+
+  font-weight: 1000;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 8px #0002;
+}
+
+.undo {
+  background: #6734d5;
+}
+
+.reset {
+  background: #e92878;
+}
+
+
+/* =========================
+   スマホ
+========================= */
+
+@media(max-width:600px) {
+
+  .app {
+    padding: 6px;
+  }
+
+  .months {
+    gap: 5px;
+  }
+
+  .month {
+    padding: 5px;
+  }
+
+  .cells {
+    gap: 4px;
+  }
+
+  .cell {
+    min-height: 64px;
+  }
+
+  .stats {
+    gap: 4px;
+  }
+
+  .stat {
+    padding: 6px 2px;
+    border-radius: 13px;
+  }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+<!-- =========================
+     タイトル
+========================= -->
+
+<header>
+
+  <h1 class="title">
+    誕生月<span>×</span>血液型
+  </h1>
+
+  <div class="subtitle">
+    各マス5人でコンプリート！
+  </div>
+
+  <div class="help">
+    自分の誕生月と血液型をタップしてカウントしよう！
+  </div>
+
+</header>
+
+
+<!-- =========================
+     上部カウンター
+========================= -->
+
+<section class="stats">
+
+  <div class="stat">
+
+    <div class="stat-label">
+      👥 参加人数
+    </div>
+
+    <div
+      class="stat-value"
+      id="participants"
+    >
+      0人
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-label">
+      ⭐ 達成マス
+    </div>
+
+    <div
+      class="stat-value"
+      id="achieved"
+    >
+      0 / 48
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-label">
+      🎁 残り人数
+    </div>
+
+    <div
+      class="stat-value"
+      id="remaining"
+    >
+      240人
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     12か月
+========================= -->
+
+<main
+  class="months"
+  id="months"
+></main>
+
+
+<!-- =========================
+     操作ボタン
+========================= -->
+
+<div class="buttons">
+
+  <button
+    class="undo"
+    onclick="undo()"
+  >
+    ↩ 1つ戻す
+  </button>
+
+
+  <button
+    class="reset"
+    onclick="resetAll()"
+  >
+    ↻ リセット
+  </button>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/*
+==================================================
+ここを変更すると別の企画にできます
+==================================================
+*/
+
+const CONFIG = {
+
+
+  /* タイトル */
+
+  title:
+    "誕生月×血液型",
+
+
+  /* サブタイトル */
+
+  subtitle:
+    "各マス5人でコンプリート！",
+
+
+  /* 説明 */
+
+  help:
+    "自分の誕生月と血液型をタップしてカウントしよう！",
+
+
+  /* 1マスの目標人数 */
+
+  targetPerCell:
+    5,
+
+
+  /* 全体の参加人数 */
+
+  totalPeople:
+    240,
+
+
+  /*
+  血液型
+  */
+
+  groups: [
+
+    {
+      name: "A型",
+      key: "A",
+      className: "a"
+    },
+
+    {
+      name: "B型",
+      key: "B",
+      className: "b"
+    },
+
+    {
+      name: "O型",
+      key: "O",
+      className: "o"
+    },
+
+    {
+      name: "AB型",
+      key: "AB",
+      className: "ab"
+    }
+
+  ],
+
+
+  /*
+  月
+
+  ここを変更すれば
+
+  都道府県
+  年代
+  コンビニ
+  スマホ機種
+
+  などにもできます。
+  */
+
+  rows: [
+
+    ["1月", "🌸"],
+
+    ["2月", "💙"],
+
+    ["3月", "🌷"],
+
+    ["4月", "🍃"],
+
+    ["5月", "🎏"],
+
+    ["6月", "🌺"],
+
+    ["7月", "🌻"],
+
+    ["8月", "🌺"],
+
+    ["9月", "🌙"],
+
+    ["10月", "🎃"],
+
+    ["11月", "🍁"],
+
+    ["12月", "🎄"]
+
+  ]
+
+};
+
+
+/*
+==================================================
+以下は基本的に変更不要
+==================================================
+*/
+
+
+const STORAGE_KEY =
+  "tiktok_counter_custom_v1";
+
+
+let counts = {};
+
+let history = [];
+
+
+/*
+タイトル設定
+*/
+
+document
+  .getElementById("title")
+  .innerHTML =
+  CONFIG.title.replace(
+    "×",
+    "<span>×</span>"
+  );
+
+
+document
+  .querySelector(".subtitle")
+  .textContent =
+  CONFIG.subtitle;
+
+
+document
+  .querySelector(".help")
+  .textContent =
+  CONFIG.help;
+
+
+/*
+キー作成
+*/
+
+function makeKey(row, group) {
+
+  return row + "_" + group;
+
+}
+
+
+/*
+保存
+*/
+
+function save() {
+
+  localStorage.setItem(
+
+    STORAGE_KEY,
+
+    JSON.stringify({
+
+      counts,
+
+      history
+
+    })
+
+  );
+
+}
+
+
+/*
+読み込み
+*/
+
+function load() {
+
+  try {
+
+    const data =
+      JSON.parse(
+
+        localStorage.getItem(
+          STORAGE_KEY
+        ) || "{}"
+
+      );
+
+
+    counts =
+      data.counts || {};
+
+
+    history =
+      data.history || {};
+
+
+  } catch (error) {
+
+    counts = {};
+
+    history = [];
+
+  }
+
+}
+
+
+/*
+画面生成
+*/
+
+function render() {
+
+
+  const root =
+    document.getElementById(
+      "months"
+    );
+
+
+  root.innerHTML = "";
+
+
+  CONFIG.rows.forEach(
+    (row, rowIndex) => {
+
+
+      const section =
+        document.createElement(
+          "section"
+        );
+
+
+      section.className =
+        "month";
+
+
+      section.innerHTML = `
+
+        <h2 class="month-title">
+
+          ${row[0]}
+
+          ${row[1]}
+
+        </h2>
+
+      `;
+
+
+      const cells =
+        document.createElement(
+          "div"
+        );
+
+
+      cells.className =
+        "cells";
+
+
+      CONFIG.groups.forEach(
+        group => {
+
+
+          const key =
+            makeKey(
+              rowIndex,
+              group.key
+            );
+
+
+          const count =
+            Math.min(
+
+              CONFIG.targetPerCell,
+
+              Number(
+                counts[key] || 0
+              )
+
+            );
+
+
+          const cell =
+            document.createElement(
+              "div"
+            );
+
+
+          cell.className =
+            "cell " +
+            group.className;
+
+
+          if (
+            count >=
+            CONFIG.targetPerCell
+          ) {
+
+            cell.classList.add(
+              "done"
+            );
+
+          }
+
+
+          cell.innerHTML = `
+
+            <div class="cell-name">
+
+              ${group.name}
+
+            </div>
+
+            <div class="count">
+
+              ${count}/${CONFIG.targetPerCell}
+
+            </div>
+
+            <div class="tap">
+
+              タップで+1
+
+            </div>
+
+          `;
+
+
+          cell.onclick =
+            function() {
+
+              addCount(key);
+
+            };
+
+
+          cells.appendChild(
+            cell
+          );
+
+        }
+
+      );
+
+
+      section.appendChild(
+        cells
+      );
+
+
+      root.appendChild(
+        section
+      );
+
+    }
+
+  );
+
+
+  updateStats();
+
+}
+
+
+/*
+カウント +1
+*/
+
+function addCount(key) {
+
+
+  const current =
+    Number(
+      counts[key] || 0
+    );
+
+
+  /*
+  5人になったら
+  それ以上増やさない
+  */
+
+  if (
+    current >=
+    CONFIG.targetPerCell
+  ) {
+
+    return;
+
+  }
+
+
+  counts[key] =
+    current + 1;
+
+
+  history.push(key);
+
+
+  save();
+
+
+  render();
+
+}
+
+
+/*
+1つ戻す
+*/
+
+function undo() {
+
+
+  if (
+    history.length === 0
+  ) {
+
+    return;
+
+  }
+
+
+  const key =
+    history.pop();
+
+
+  counts[key] =
+    Math.max(
+
+      0,
+
+      Number(
+        counts[key] || 0
+      ) - 1
+
+    );
+
+
+  if (
+    counts[key] === 0
+  ) {
+
+    delete counts[key];
+
+  }
+
+
+  save();
+
+
+  render();
+
+}
+
+
+/*
+全部リセット
+*/
+
+function resetAll() {
+
+
+  const answer =
+    confirm(
+      "すべてリセットしますか？"
+    );
+
+
+  if (!answer) {
+
+    return;
+
+  }
+
+
+  counts = {};
+
+  history = [];
+
+
+  save();
+
+
+  render();
+
+}
+
+
+/*
+上部カウンター更新
+*/
+
+function updateStats() {
+
+
+  const values =
+    Object.values(
+      counts
+    ).map(Number);
+
+
+  /*
+  現在の参加人数
+  */
+
+  const participants =
+    values.reduce(
+      (total, value) =>
+        total + value,
+      0
+    );
+
+
+  /*
+  5人達成したマス
+  */
+
+  const achieved =
+    values.filter(
+      value =>
+        value >=
+        CONFIG.targetPerCell
+    ).length;
+
+
+  /*
+  全マス数
+  */
+
+  const totalCells =
+    CONFIG.rows.length *
+    CONFIG.groups.length;
+
+
+  /*
+  残り人数
+  */
+
+  const remaining =
+    Math.max(
+
+      0,
+
+      CONFIG.totalPeople -
+      participants
+
+    );
+
+
+  document
+    .getElementById(
+      "participants"
+    )
+    .textContent =
+    participants + "人";
+
+
+  document
+    .getElementById(
+      "achieved"
+    )
+    .textContent =
+    achieved +
+    " / " +
+    totalCells;
+
+
+  document
+    .getElementById(
+      "remaining"
+    )
+    .textContent =
+    remaining + "人";
+
+}
+
+
+/*
+起動
+*/
+
+load();
+
+render();
+
+</script>
+
+</body>
+</html>
